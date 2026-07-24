@@ -98,3 +98,57 @@ button.selected {
   color: #1f2a2e;
   line-height: 1.7;
 }
+.route-section {
+  max-width: 760px;
+  margin: 24px auto 0;
+}
+
+.route-section h2 {
+  margin: 0 0 12px;
+}
+
+.route-cards {
+  display: grid;
+  gap: 14px;
+}
+
+.route-card {
+  background: white;
+  border: 1px solid #dce3df;
+  border-radius: 12px;
+  padding: 18px;
+}
+
+.route-title {
+  color: #60706c;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.route-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.route-main strong {
+  font-size: 32px;
+}
+
+.route-main span {
+  color: #60706c;
+  font-weight: 700;
+}
+
+.route-via {
+  background: #f6f7f3;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 0 0 12px;
+}
+
+.route-description {
+  line-height: 1.7;
+  margin: 0;
+}
