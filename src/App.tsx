@@ -10,16 +10,13 @@ const routePreferences: { id: RoutePreference; label: string }[] = [
   { id: 'cherry', label: '桜スポット' },
 ]
 
-function buildRouteOptions(
-  preference: RoutePreference,
-  sceneryPriority: number,
-): RouteOption[] {
+function buildRouteOptions(preference: RoutePreference, sceneryPriority: number): RouteOption[] {
   const normalRoute: RouteOption = {
     id: 'normal',
     title: '通常ルート',
     minutes: 18,
     distanceKm: 1.4,
-    description: 'できるだけ早く目的地に向かうルートです。',
+    description: '信号が少なく、まっすぐ進む想定のルートです。',
   }
 
   if (preference === 'fastest') {
@@ -29,16 +26,17 @@ function buildRouteOptions(
   const extraMinutes = Math.round(4 + sceneryPriority / 10)
   const extraDistance = Number((0.3 + sceneryPriority / 200).toFixed(1))
 
-  const scenicRoute: RouteOption = {
-    id: 'scenic',
-    title: '希望に合わせた寄り道ルート',
-    minutes: normalRoute.minutes + extraMinutes,
-    distanceKm: Number((normalRoute.distanceKm + extraDistance).toFixed(1)),
-    via: scenicSpots[preference],
-    description: '景観の優先度に合わせて、遠回りの許容度を変える想定のルートです。',
-  }
-
-  return [normalRoute, scenicRoute]
+  return [
+    normalRoute,
+    {
+      id: 'scenic',
+      title: '寄り道ルート',
+      minutes: normalRoute.minutes + extraMinutes,
+      distanceKm: Number((normalRoute.distanceKm + extraDistance).toFixed(1)),
+      via: scenicSpots[preference],
+      description: '景観の優先度に合わせて、遠回りの許容度を変える想定のルートです。',
+    },
+  ]
 }
 
 function App() {
@@ -51,20 +49,21 @@ function App() {
     () => buildRouteOptions(preference, sceneryPriority),
     [preference, sceneryPriority],
   )
+
   const selectedLabel = routePreferences.find((item) => item.id === preference)?.label
+  const scenicRoute = routeOptions.find((route) => route.id === 'scenic')
 
   return (
     <main className="app">
-      <section className="hero">
-        <p className="app-name">Yorimichi Route</p>
-        <h1>最短ではなく、今日歩きたい道へ。</h1>
-        <p className="lead">
-          出発地・目的地・その日の気分をもとに、通常ルートと寄り道ルートを比較します。
-        </p>
-      </section>
+      <header className="top-bar">
+        <p className="logo">Yorimichi Route</p>
+        <p className="tagline">最短ではなく、今日歩きたい道へ。</p>
+      </header>
 
-      <div className="layout">
-        <section className="search-panel">
+      <section className="app-layout">
+        <aside className="search-panel">
+          <h1>ルート検索</h1>
+
           <label>
             出発地
             <input value={start} onChange={(event) => setStart(event.target.value)} />
@@ -107,36 +106,38 @@ function App() {
           <div className="preview">
             <p>現在の条件</p>
             <strong>
-              {start} から {destination} まで、{selectedLabel}
-              のルートを探します。
+              {start} から {destination} まで、{selectedLabel}のルートを探します。
             </strong>
           </div>
-        </section>
+        </aside>
 
-        <section className="route-section">
-          <div className="section-heading">
-            <p>Route Options</p>
-            <h2>ルート候補</h2>
+        <section className="main-panel">
+          <div className="mock-map">
+            <div className="map-grid" />
+            <div className="water-area" />
+            <div className="normal-route" />
+            {preference !== 'fastest' && <div className="scenic-route" />}
+
+            <div className="map-label start">出発<br />{start}</div>
+            <div className="map-label goal">到着<br />{destination}</div>
+            {scenicRoute?.via && <div className="map-label via">経由<br />{scenicRoute.via}</div>}
           </div>
 
           <div className="route-cards">
             {routeOptions.map((route) => (
-              <article className="route-card" key={route.id}>
+              <article className={route.id === 'scenic' ? 'route-card scenic' : 'route-card'} key={route.id}>
                 <p className="route-title">{route.title}</p>
-
                 <div className="route-main">
                   <strong>{route.minutes}分</strong>
                   <span>{route.distanceKm}km</span>
                 </div>
-
                 {route.via && <p className="route-via">経由：{route.via}</p>}
-
                 <p className="route-description">{route.description}</p>
               </article>
             ))}
           </div>
         </section>
-      </div>
+      </section>
     </main>
   )
 }
