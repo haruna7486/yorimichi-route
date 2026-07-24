@@ -1,32 +1,52 @@
-# React + TypeScript + Vite
+# Yorimichi Route
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Yorimichi Routeは、最短ルートだけでなく、利用者の「どんな道を通りたいか」という希望を反映してルート候補を提案するWebアプリです。
 
-Currently, two official plugins are available:
+例えば、以下のような希望を想定しています。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- 海沿いを通って目的地まで行きたい
+- 遠回りでもいいから公園や緑が多い道を通りたい
+- 桜スポットを通りながら目的地まで行きたい
+- 急いでいるので速さを重視したい
 
-## React Compiler
+## 背景
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+一般的な地図アプリでは、目的地までの早さや距離を重視したルートが中心に表示されます。  
+一方で、時間に余裕があるときや散歩を楽しみたいときには、「早く着く道」ではなく「気分に合う道」を選びたい場面があります。
 
-## Expanding the Oxlint configuration
+このアプリでは、効率だけでなく景観や気分をルート選択に取り入れることを目指しています。
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 現在できること
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+- 出発地と目的地を入力できる
+- ルートの希望を選択できる
+  - 速さ重視
+  - 海沿い
+  - 公園・緑
+  - 桜スポット
+- 速さ重視と景観重視のバランスをスライダーで調整できる
+- 選択内容に応じてルート候補カードを表示できる
+- 通常ルートと寄り道ルートを比較できる
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## 使用技術
+
+- React
+- TypeScript
+- Vite
+- CSS
+
+## 今後追加したい機能
+
+- Google Maps JavaScript APIを使った地図表示
+- Google Routes APIを使った実際のルート取得
+- 景観スポットの緯度・経度データ管理
+- 自然言語での希望入力
+- 季節、天気、混雑状況を考慮したルート提案
+- スマートフォンでも使いやすいUI改善
+
+## 開発方法
+
+依存関係をインストールします。
+
+```bash
+npm install
