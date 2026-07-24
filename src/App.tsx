@@ -1,16 +1,7 @@
 import { useMemo, useState } from 'react'
 import './App.css'
-
-type RoutePreference = 'fastest' | 'waterfront' | 'green' | 'cherry'
-
-type RouteOption = {
-  id: string
-  title: string
-  minutes: number
-  distanceKm: number
-  via?: string
-  description: string
-}
+import { scenicSpots } from './data/scenicSpots'
+import type { RouteOption, RoutePreference } from './types/route'
 
 const routePreferences: { id: RoutePreference; label: string }[] = [
   { id: 'fastest', label: '速さ重視' },
@@ -18,12 +9,6 @@ const routePreferences: { id: RoutePreference; label: string }[] = [
   { id: 'green', label: '公園・緑' },
   { id: 'cherry', label: '桜スポット' },
 ]
-
-const scenicSpots: Record<Exclude<RoutePreference, 'fastest'>, string> = {
-  waterfront: '豊洲ぐるり公園',
-  green: '有明テニスの森',
-  cherry: 'シンボルプロムナード公園',
-}
 
 function buildRouteOptions(
   preference: RoutePreference,
