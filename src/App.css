@@ -152,3 +152,16 @@ button.selected {
   line-height: 1.7;
   margin: 0;
 }
+.priority-slider {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+  color: #60706c;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.priority-slider input {
+  accent-color: #1f7a6a;
+}

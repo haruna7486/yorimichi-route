@@ -25,7 +25,10 @@ const scenicSpots: Record<Exclude<RoutePreference, 'fastest'>, string> = {
   cherry: 'シンボルプロムナード公園',
 }
 
-function buildRouteOptions(preference: RoutePreference): RouteOption[] {
+function buildRouteOptions(
+  preference: RoutePreference,
+  sceneryPriority: number,
+): RouteOption[] {
   const normalRoute: RouteOption = {
     id: 'normal',
     title: '通常ルート',
@@ -38,15 +41,17 @@ function buildRouteOptions(preference: RoutePreference): RouteOption[] {
     return [normalRoute]
   }
 
-  const scenicRoute: RouteOption = {
-    id: 'scenic',
-    title: '希望に合わせた寄り道ルート',
-    minutes: 25,
-    distanceKm: 1.9,
-    via: scenicSpots[preference],
-    description: '少し遠回りして、希望に近い景観スポットを通るルートです。',
-  }
+  const extraMinutes = Math.round(4 + sceneryPriority / 10)
+const extraDistance = Number((0.3 + sceneryPriority / 200).toFixed(1))
 
+const scenicRoute: RouteOption = {
+  id: 'scenic',
+  title: '希望に合わせた寄り道ルート',
+  minutes: normalRoute.minutes + extraMinutes,
+  distanceKm: Number((normalRoute.distanceKm + extraDistance).toFixed(1)),
+  via: scenicSpots[preference],
+  description: '景観の優先度に合わせて、遠回りの許容度を変える想定のルートです。',
+}
   return [normalRoute, scenicRoute]
 }
 
@@ -54,8 +59,12 @@ function App() {
   const [start, setStart] = useState('豊洲駅')
   const [destination, setDestination] = useState('武蔵野大学 有明キャンパス')
   const [preference, setPreference] = useState<RoutePreference>('waterfront')
+  const [sceneryPriority, setSceneryPriority] = useState(70)
 
-  const routeOptions = useMemo(() => buildRouteOptions(preference), [preference])
+  const routeOptions = useMemo(
+  () => buildRouteOptions(preference, sceneryPriority),
+  [preference, sceneryPriority],
+)
   const selectedLabel = routePreferences.find((item) => item.id === preference)?.label
 
   return (
@@ -94,7 +103,18 @@ function App() {
             </button>
           ))}
         </div>
-
+<label className="priority-slider">
+  <span>速さ重視</span>
+  <input
+    type="range"
+    min="0"
+    max="100"
+    step="10"
+    value={sceneryPriority}
+    onChange={(event) => setSceneryPriority(Number(event.target.value))}
+  />
+  <span>景観重視</span>
+</label>
         <div className="preview">
           <p>現在の条件</p>
           <strong>
