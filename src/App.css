@@ -78,3 +78,23 @@ button:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+button.selected {
+  background: #df6f57;
+}
+
+.preview {
+  border-top: 1px solid #dce3df;
+  padding-top: 18px;
+}
+
+.preview p {
+  color: #60706c;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.preview strong {
+  color: #1f2a2e;
+  line-height: 1.7;
+}
